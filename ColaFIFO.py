@@ -1,16 +1,33 @@
+import threading
+
 
 class ColaFIFO:
 
-    def __init__(self):
+    def __init__(self, max_size):
+        self.max_size = max_size
         self.elementos = []
-
+        self.lock = threading.Lock()
 
     def insertar(self, dato):
+        # self.lock.acquire()
+        # try:
+        if len(self.elementos) > self.max_size:
+            print("max stack size reached\n")
         self.elementos.append(dato)
         return dato
 
+    # finally:
+    #     self.lock.release()
+
     def extraer(self):
-        return self.elementos.pop(0)
+        # self.lock.acquire()
+        # try:
+        if len(self.elementos) > 0:
+            return self.elementos.pop(0)
+        else:
+            print("no elements to pop\n")
+        # finally:
+        #     self.lock.release()
 
     def ultimo(self):
         return self.elementos[-1]
@@ -23,33 +40,3 @@ class ColaFIFO:
 
     def cantidad_elementos(self):
         return len(self.elementos)
-
-
-def main():
-    cola = ColaFIFO()
-
-    # check if esta_vacia()
-
-    print(cola.cola_vacia())
-
-    for i in range (1,6):
-        cola.insertar(i)
-
-    print(cola.cola_vacia())
-    print(cola.cantidad_elementos())
-
-    print(cola.primero(),cola.ultimo())
-    cola.extraer()
-    print(cola.primero(),cola.ultimo())
-
-
-    cola.extraer()
-    cola.extraer()
-    cola.extraer()
-    cola.extraer()
-
-    print(cola.cola_vacia())
-    print(cola.cantidad_elementos())
-
-if __name__ == '__main__':
-    main()
